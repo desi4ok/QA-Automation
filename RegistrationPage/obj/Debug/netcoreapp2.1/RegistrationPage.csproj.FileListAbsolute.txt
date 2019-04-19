@@ -1,0 +1,14 @@
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\bin\Debug\netcoreapp2.1\RegistrationPage.deps.json
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\bin\Debug\netcoreapp2.1\RegistrationPage.dll
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\obj\Debug\netcoreapp2.1\RegistrationPage.csprojAssemblyReference.cache
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\obj\Debug\netcoreapp2.1\RegistrationPage.csproj.CoreCompileInputs.cache
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\obj\Debug\netcoreapp2.1\RegistrationPage.AssemblyInfoInputs.cache
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\obj\Debug\netcoreapp2.1\RegistrationPage.AssemblyInfo.cs
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\bin\Debug\netcoreapp2.1\RegistrationPage.runtimeconfig.json
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\bin\Debug\netcoreapp2.1\RegistrationPage.runtimeconfig.dev.json
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\bin\Debug\netcoreapp2.1\NUnit3.TestAdapter.dll
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\bin\Debug\netcoreapp2.1\NUnit3.TestAdapter.pdb
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\bin\Debug\netcoreapp2.1\nunit.engine.netstandard.dll
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\bin\Debug\netcoreapp2.1\RegistrationPage.pdb
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\obj\Debug\netcoreapp2.1\RegistrationPage.dll
+C:\Users\Desi\source\repos\RegistrationPage\RegistrationPage\obj\Debug\netcoreapp2.1\RegistrationPage.pdb
