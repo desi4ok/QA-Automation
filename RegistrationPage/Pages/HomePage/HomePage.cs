@@ -10,5 +10,7 @@
         }
 
         public IWebElement SignInButton => Wait.Until((d) => { return d.FindElement(By.CssSelector("#header>div.nav>div>div>nav>div.header_user_info")); });
+
+        public IWebElement AuthenticationTitle => Wait.Until((d) => { return d.FindElement(By.XPath("//*[@id='center_column']/h1")); });
     }
 }

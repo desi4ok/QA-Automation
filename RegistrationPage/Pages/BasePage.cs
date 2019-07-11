@@ -18,7 +18,7 @@
 
         public IWebDriver Driver => _driver;
 
-        public WebDriverWait Wait => new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+        public WebDriverWait Wait => new WebDriverWait(_driver, TimeSpan.FromSeconds(60));
 
         public string Url { get; protected set; }
 

@@ -6,10 +6,12 @@
     using OpenQA.Selenium.Support.UI;
     using RegistrationPage.Models;
     using RegistrationPage.Pages;
+    using RegistrationPage.Pages.AccountPage;
     using RegistrationPage.Pages.RegistrationPage;
     using System;
     using System.IO;
     using System.Reflection;
+    using System.Threading;
 
     public class RegistrationPageProblem
     {
@@ -18,8 +20,9 @@
         private HomePage homePage;
         private LoginPage loginPage;
         private RegistrationPage regPage;
+        private AccountPage accountPage;
 
-        [SetUp]
+        [SetUp] 
         public void SetUp()
         {
             driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
@@ -29,6 +32,7 @@
             homePage = new HomePage(driver);
             loginPage = new LoginPage(driver);
             regPage = new RegistrationPage(driver);
+            accountPage = new AccountPage(driver);
         }
 
         [TearDown]
@@ -36,171 +40,134 @@
         {
             driver.Quit();
         }
-/*
+
         [Test]
         public void NavigateToRegistrationPage()
         {
-            driver.Navigate().GoToUrl("http://automationpractice.com/index.php");
+            homePage.NavigateTo();
 
-          //  signInButton.Click();
+            homePage.SignInButton.Click();
 
-            string expectedURL = "http://automationpractice.com/index.php?controller=authentication&back=my-account";
-            Assert.AreEqual(expectedURL, driver.Url);
-
-            IWebElement authenticationTitle = driver.FindElement(By.XPath("//*[@id='center_column']/h1"));
-            string authenticationText = authenticationTitle.Text;
+            string authenticationText = homePage.AuthenticationTitle.Text;
             string expectedText = "AUTHENTICATION";
             Assert.AreEqual(expectedText, authenticationText);
 
-          //  string emailInputId = "email_create";
-         //   Assert.AreEqual("input", emailInput.TagName);
-          //  string elementId = emailInput.GetAttribute("id");
-          //  Assert.AreEqual(emailInputId, elementId);
+            Assert.AreEqual("input", loginPage.EmailInput.TagName);
 
-           
-          //  string buttonText = button.GetAttribute("value");
-          //  Assert.AreEqual("Create an account", buttonText);
+            string emailInputId = "email_create";
+            string elementId = loginPage.EmailInput.GetAttribute("id");
+            Assert.AreEqual(emailInputId, elementId);
+
+            string buttonText = loginPage.SubmitButtonText.GetAttribute("value");
+            Assert.AreEqual("Create an account", buttonText);
         }
-        */
+
         [Test]
         public void PositiveScenario_RegistrationForm()
         {
-            
+
             var path = Path.GetFullPath(Directory.GetCurrentDirectory() + "/../../../JSONs/ValidRegistrationUser.json");
             var user = RegistrationUser.FromJson(File.ReadAllText(path));
 
             loginPage.NavigateTo();
 
             loginPage.EmailInput.Clear();
-            loginPage.EmailInput.SendKeys("desi14@abv.bg");
+            loginPage.EmailInput.SendKeys("desi20@abv.bg");
             loginPage.SubmitButton.Click();
 
             regPage.FillForm(user);
+
+            Assert.IsTrue(accountPage.WelcomeMessage.Displayed);
+            StringAssert.Contains("Welcome to your account", accountPage.WelcomeMessage.Text);
         }
 
-        /*
+
         [Test]
         public void NegativeScenario_EmptyForm()
         {
-            driver.Navigate().GoToUrl("http://automationpractice.com/index.php?controller=authentication&back=my-account");
+            loginPage.NavigateTo();
 
-            IWebElement emailInput = driver.FindElement(By.Id("email_create"));
-            emailInput.SendKeys("desi2@abv.bg");
+            loginPage.EmailInput.SendKeys("dessi1@abv.bg");
 
-            IWebElement submitButton = driver.FindElement(By.Id("SubmitCreate"));
-            submitButton.Click();
+            loginPage.SubmitButton.Click();
 
-            IWebElement registerButton = wait.Until((d) => { return d.FindElement(By.Id("submitAccount")); });
-            registerButton.Click();
+            regPage.RegisterButton.Click();
         }
 
         [Test]
-        public void NegativeScenario_InvalidZip()
+        public void NegativeScenario_InvalidEmail()
         {
-            driver.Navigate().GoToUrl("http://automationpractice.com/index.php?controller=authentication&back=my-account");
+            var path = Path.GetFullPath(Directory.GetCurrentDirectory() + "/../../../JSONs/InvalidEmail.json");
+            var user = RegistrationUser.FromJson(File.ReadAllText(path));
 
-            IWebElement emailInput = driver.FindElement(By.Id("email_create"));
-            emailInput.SendKeys("desi2@abv.bg");
+            loginPage.NavigateTo();
 
-            IWebElement submitButton = driver.FindElement(By.Id("SubmitCreate"));
-            submitButton.Click();
-            
-            IWebElement firstName = wait.Until((d) => { return d.FindElement(By.Id("customer_firstname")); });
-            firstName.SendKeys("Desisalava");
+            loginPage.EmailInput.Clear();
+            loginPage.EmailInput.SendKeys("des4@abv.bg");
+            loginPage.SubmitButton.Click();
 
-            IWebElement lastName = wait.Until((d) => { return d.FindElement(By.Id("customer_lastname")); });
-            lastName.SendKeys("Goleva");
+            regPage.FillForm(user);
 
-            IWebElement email = wait.Until((d) => { return d.FindElement(By.Id("email")); });
-            email.Click();
-
-            IWebElement password = wait.Until((d) => { return d.FindElement(By.Id("passwd")); });
-            password.SendKeys("444444");
-            
-            IWebElement address = wait.Until((d) => { return d.FindElement(By.Id("address1")); });
-            address.SendKeys("Vitosha 10");
-
-            IWebElement city = wait.Until((d) => { return d.FindElement(By.Id("city")); });
-            city.SendKeys("Sofia");
-
-            IWebElement stateHelp = wait.Until((d) => { return d.FindElement(By.Id("id_state")); });
-            SelectElement state = new SelectElement(stateHelp);
-            state.SelectByText("Colorado");
-
-            IWebElement zip = wait.Until((d) => { return d.FindElement(By.Id("postcode")); });
-            zip.SendKeys("1234");
-
-            IWebElement countryHelp = wait.Until((d) => { return d.FindElement(By.Id("id_country")); });
-            SelectElement country = new SelectElement(countryHelp);
-            country.SelectByText("United States");
-
-            IWebElement mobilePhone = wait.Until((d) => { return d.FindElement(By.Id("phone_mobile")); });
-            mobilePhone.SendKeys("555-555");
-
-            IWebElement registerButton = wait.Until((d) => { return d.FindElement(By.Id("submitAccount")); });
-            registerButton.Click();
+            regPage.Email.Click();
+            regPage.FirstName.Click();
+            StringAssert.Contains("form-error", regPage.EmailParent.GetAttribute("class"));
         }
 
         [Test]
-        public void NegativeScenario_AlreadyRegisteredEmail()
+        public void NegativeScenario_InvalidFirstName()
         {
-            driver.Navigate().GoToUrl("http://automationpractice.com/index.php?controller=authentication&back=my-account");
 
-            IWebElement emailInput = driver.FindElement(By.Id("email_create"));
-            emailInput.SendKeys("desi4@abv.bg");
+            var path = Path.GetFullPath(Directory.GetCurrentDirectory() + "/../../../JSONs/InvalidFirstName.json");
+            var user = RegistrationUser.FromJson(File.ReadAllText(path));
 
-            IWebElement submitButton = driver.FindElement(By.Id("SubmitCreate"));
-            submitButton.Click();
+            loginPage.NavigateTo();
+
+            loginPage.EmailInput.Clear();
+            loginPage.EmailInput.SendKeys("fes1@abv.bg");
+            loginPage.SubmitButton.Click();
+
+            regPage.FillForm(user);
+
+            Assert.IsTrue(regPage.ErrorMessage.Displayed);
+            StringAssert.Contains("firstname is invalid", regPage.ErrorMessage.Text);
         }
 
         [Test]
         public void NegativeScenario_InvalidPassword()
         {
-            driver.Navigate().GoToUrl("http://automationpractice.com/index.php?controller=authentication&back=my-account");
 
-            IWebElement emailInput = driver.FindElement(By.Id("email_create"));
-            emailInput.SendKeys("desi3@abv.bg");
+            var path = Path.GetFullPath(Directory.GetCurrentDirectory() + "/../../../JSONs/InvalidPassword.json");
+            var user = RegistrationUser.FromJson(File.ReadAllText(path));
 
-            IWebElement submitButton = driver.FindElement(By.Id("SubmitCreate"));
-            submitButton.Click();
+            loginPage.NavigateTo();
 
-            IWebElement firstName = wait.Until((d) => { return d.FindElement(By.Id("customer_firstname")); });
-            firstName.SendKeys("Desisalava");
+            loginPage.EmailInput.Clear();
+            loginPage.EmailInput.SendKeys("pes1@abv.bg");
+            loginPage.SubmitButton.Click();
 
-            IWebElement lastName = wait.Until((d) => { return d.FindElement(By.Id("customer_lastname")); });
-            lastName.SendKeys("Goleva");
+            regPage.FillForm(user);
 
-            IWebElement email = wait.Until((d) => { return d.FindElement(By.Id("email")); });
-            email.Click();
-
-            IWebElement password = wait.Until((d) => { return d.FindElement(By.Id("passwd")); });
-            password.SendKeys("444");
-
-            IWebElement address = wait.Until((d) => { return d.FindElement(By.Id("address1")); });
-            address.SendKeys("Vitosha 10");
-
-            IWebElement city = wait.Until((d) => { return d.FindElement(By.Id("city")); });
-            city.SendKeys("Sofia");
-
-            IWebElement stateHelp = wait.Until((d) => { return d.FindElement(By.Id("id_state")); });
-            SelectElement state = new SelectElement(stateHelp);
-            state.SelectByText("Colorado");
-            
-            IWebElement countryHelp = wait.Until((d) => { return d.FindElement(By.Id("id_country")); });
-            SelectElement country = new SelectElement(countryHelp);
-            country.SelectByText("United States");
-
-            IWebElement zip = wait.Until((d) => { return d.FindElement(By.Id("postcode")); });
-            zip.SendKeys("12345");
-
-            IWebElement mobilePhone = wait.Until((d) => { return d.FindElement(By.Id("phone_mobile")); });
-            mobilePhone.SendKeys("555-555");
-
-            IWebElement registerButton = wait.Until((d) => { return d.FindElement(By.Id("submitAccount")); });
-            registerButton.Click();
+            Assert.IsTrue(regPage.ErrorMessage.Displayed);
+            StringAssert.Contains("passwd is required", regPage.ErrorMessage.Text);
         }
-        */
-        
 
+        [Test]
+        public void NegativeScenario_InvalidZip()
+        {
+
+            var path = Path.GetFullPath(Directory.GetCurrentDirectory() + "/../../../JSONs/InvalidZip.json");
+            var user = RegistrationUser.FromJson(File.ReadAllText(path));
+
+            loginPage.NavigateTo();
+
+            loginPage.EmailInput.Clear();
+            loginPage.EmailInput.SendKeys("zes1@abv.bg");
+            loginPage.SubmitButton.Click();
+
+            regPage.FillForm(user);
+
+            Assert.IsTrue(regPage.ErrorMessage.Displayed);
+            StringAssert.Contains("The Zip/Postal code you've entered is invalid. It must follow this format: 00000", regPage.ErrorMessage.Text);
+        }
     }
 }

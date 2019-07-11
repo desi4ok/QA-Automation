@@ -16,31 +16,22 @@ namespace RegistrationPage.Pages.RegistrationPage
             RadioButton.Click();
             FirstName.SendKeys(user.FirstName);
             LastName.SendKeys(user.LastName);
-            Email.Click();
+            Email.Clear();
+            Email.SendKeys(user.Email);
             Password.SendKeys(user.Password);
-
-            SelectElement days = new SelectElement(DaysHelp);
-            days.SelectByIndex(user.DateOfBirth.Day);
-
-            SelectElement months = new SelectElement(MonthsHelp);
-            months.SelectByIndex(user.DateOfBirth.Month);
-
-            SelectElement years = new SelectElement(YearsHelp);
-            years.SelectByValue(user.DateOfBirth.Year.ToString());
-
+            DaysOption.SelectByIndex(user.DateOfBirth.Day);
+            MonthsOption.SelectByIndex(user.DateOfBirth.Month);
+            YearsOption.SelectByValue(user.DateOfBirth.Year.ToString());
             SignUpNewsletter.Click();
-            Address.SendKeys("Vitosha 10");
-            City.SendKeys("Sofia");
-
-            SelectElement state = new SelectElement(StateHelp);
-            state.SelectByText("Colorado");
-
-            Zip.SendKeys("12345");
-
-            SelectElement country = new SelectElement(CountryHelp);
-            country.SelectByText("United States");
-
-            MobilePhone.SendKeys("555-555");
+            Address_FirstName.SendKeys(user.Address.FirstName);
+            Address_LastName.SendKeys(user.Address.LastName);
+            Address_Address1.SendKeys(user.Address.Address1);
+            Address_City.SendKeys(user.Address.City);
+            StateOption.SelectByText(user.Address.State);
+            Address_ZipCode.SendKeys(user.Address.ZipCode.ToString());
+            CountryOption.SelectByText(user.Address.Country);
+            Address_Info.SendKeys(user.Address.Info);
+            Address_MobPhone.SendKeys(user.Address.MobPhone);
             RegisterButton.Click();
         }
     }
